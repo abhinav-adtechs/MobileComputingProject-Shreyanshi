@@ -16,7 +16,7 @@ import com.skyfishjy.library.RippleBackground
 import java.util.ArrayList
 import java.util.Locale
 
-class MainActivity : AppCompatActivity() {
+class MainActivityKotlin : AppCompatActivity() {
 
     private var btnSpeak: ImageView? = null
     private val REQ_CODE_SPEECH_INPUT = 100
