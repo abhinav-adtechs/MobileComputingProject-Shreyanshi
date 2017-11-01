@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gelitenight.waveview.library.WaveView;
 import com.skyfishjy.library.RippleBackground;
@@ -31,8 +32,9 @@ public class MainActivity extends AppCompatActivity {
     private WaveHelper waveHelper ;
     private WaveView waveView ;
 
-    private int mBorderColor = Color.parseColor("#33FFEB3B");
-    private int mBorderWidth = 10;
+    long millis ;
+
+    private MainActivity mainActivity ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
         waveView.setShapeType(WaveView.ShapeType.SQUARE);
 
+        mainActivity = (MainActivity) this ;
 
         tvResult = (TextView) findViewById(R.id.activity_main_tv_result) ;
         btnSpeak = (ImageView) findViewById(R.id.activity_main_btn_mic) ;
@@ -123,6 +126,10 @@ public class MainActivity extends AppCompatActivity {
             public void onResults(Bundle results) {
                 Log.d(TAG, "onResults() called with: results = [" + results.toString() + "]");
                 tvResult.setText(results.getStringArrayList("results_recognition").get(0));
+                millis = System.currentTimeMillis()  - millis;
+
+                Toast.makeText(mainActivity, "Duration of synthesis is : " + (millis%1000) + "secs", Toast.LENGTH_LONG).show();
+
                 micState = false ;
                 waveHelper.cancel();
             }
@@ -152,25 +159,4 @@ public class MainActivity extends AppCompatActivity {
         }*/
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        switch (requestCode) {
-            case REQ_CODE_SPEECH_INPUT: {
-                if (resultCode == RESULT_OK && null != data) {
-
-                    ArrayList<String> result = data
-                            .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    for (int i = 0; i < result.size(); i++) {
-                        Log.i(TAG, "onActivityResult: TEXT: " + result.get(i));
-                        tvResult.setText(result.get(i));
-                    }
-
-                }
-                break;
-            }
-
-        }
-    }
 }
